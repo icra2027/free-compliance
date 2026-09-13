@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Compliance is an Action: extracting real, identifiable compliance labels from bilateral teleoperation and distilling them into a vision-language-action policy for contact-rich manipulation.">
+  <meta name="keywords" content="VLA, vision-language-action, compliance, impedance control, bilateral teleoperation, manipulation, robot learning">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Compliance is an Action</title>
+
+  <!--
+    ANONYMITY NOTE (double-blind review):
+    - No analytics/tracking script is included on purpose (a persistent analytics ID
+      can link this page to an identified account/property). Do not add one back
+      until after the review period.
+    - No author names, affiliations, or personal links appear anywhere in this file.
+    - Before deploying, double-check image EXIF/metadata and PDF metadata (author,
+      producer, file path) for anything identifying, and check this repo's git
+      remote/commit author identity (see README.md in this repo for notes).
+  -->
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Compliance is an Action: Distilling Human
+            Impedance from Bilateral Demonstrations into Vision-Language-Action Policies</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Anonymous Author(s)</span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Anonymous Institution</span>
+          </div>
+
+          <div class="is-size-6 has-text-grey">
+            Submitted to IEEE ICRA 2027 &mdash; anonymized for double-blind review
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!--
+                PLACEHOLDER LINKS
+                Replace href="#" below once you have anonymized hosting for each:
+                  - Paper: an anonymous PDF link (e.g. an OpenReview submission link,
+                    or a PDF uploaded to this same repo under ./static/videos/paper.pdf
+                    with no identifying metadata).
+                  - Code:  an anonymized code host, e.g. https://anonymous.4open.science
+                  - Data:  same anonymization approach as Code, or a release note here
+                    pointing to an anonymized data host.
+                Until filled in, these buttons are left disabled (greyed out, not
+                clickable) so the page never ships a dead or accidentally-identifying link.
+              -->
+              <span class="link-block">
+                <a href="#" class="external-link button is-normal is-rounded is-dark" disabled>
+                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                  <span>Paper (add anonymous link)</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="#" class="external-link button is-normal is-rounded is-dark" disabled>
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>Code (add anonymous link)</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="#" class="external-link button is-normal is-rounded is-dark" disabled>
+                  <span class="icon"><i class="far fa-images"></i></span>
+                  <span>Data (add anonymous link)</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <!--
+        TEASER VIDEO PLACEHOLDER
+        Drop a short (~10-20s), silent/looping, non-identifying (no faces, no
+        lab signage, no audio with names) clip of the wiping-task rollout at:
+          ./static/videos/teaser.mp4
+        Then replace the <img> block below with:
+
+          <video id="teaser" autoplay muted loop playsinline height="100%">
+            <source src="./static/videos/teaser.mp4" type="video/mp4">
+          </video>
+
+        Until then this shows the method/pipeline figure as a stand-in.
+      -->
+      <img src="./static/images/figures/fig2_pipeline.png"
+           alt="Bilateral teleoperation to compliance-label extraction pipeline overview."
+           style="max-width: 100%;">
+      <h2 class="subtitle has-text-centered">
+        Four-channel bilateral teleoperation already records what pose-only interfaces cannot:
+        an independent measurement of the operator's commanded equilibrium &mdash; which is all
+        it takes to make per-timestep, anisotropic <span class="dnerf">compliance</span>
+        identifiable from real demonstrations.
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Contact-rich manipulation &mdash; wiping, insertion, assembly &mdash; requires a robot
+            to modulate <em>how hard</em> it pushes, not only <em>where</em> it goes: compliance is
+            as much an action as pose is. A growing wave of vision-language-action (VLA) policies
+            injects contact force as an <em>input</em> observation, but far fewer predict
+            compliance as an <em>output</em>, and the ones that do rely on privileged simulated
+            contact state or a hand-specified task structure. This is not an oversight; it is
+            forced by the interface. Every popular teleoperation channel for collecting VLA
+            demonstrations &mdash; VR controllers, a SpaceMouse, a handheld UMI gripper &mdash;
+            records only where the operator moved the robot, never what stiffness they intended it
+            to have.
+          </p>
+          <p>
+            We show this is an identifiability problem, not a data-scale one. Given only the
+            measured follower pose and the measured contact wrench, a standard diagonal impedance
+            law has two unknowns per axis and one observed equation, at every timestep, for every
+            demonstration a pose-only interface has ever recorded. We resolve it with an interface
+            property, not a modeling trick: four-channel bilateral teleoperation already exchanges
+            position and force between a leader and a follower arm, and the leader pose is a
+            physical measurement of what the operator commanded as the equilibrium. Substituting
+            this for the unknown equilibrium collapses the ambiguity and makes per-timestep,
+            anisotropic stiffness identifiable by regression, using only the manipulator's own
+            joint-torque sensing &mdash; no dedicated force/torque or tactile sensor, at training
+            or inference time.
+          </p>
+          <p>
+            Applied to real bilateral wiping demonstrations, our identifiability mask retains
+            64.2&ndash;95.0% of in-contact timesteps across all six wrench axes, with measured
+            per-axis noise floors well below the labels' working range. A learned stiffness
+            predictor beats a constant-value baseline on a held-out, cross-operator split,
+            rejecting the null hypothesis that the extracted labels are noise. Trained on these
+            labels, a compliance-output VLA policy
+            <span class="placeholder-inline" title="Replace with the final head-to-head result">
+              [PLACEHOLDER &mdash; insert final real-robot policy result here: e.g. success rate
+              or task metric for the compliance-output policy (B5) vs. a fixed-stiffness
+              position-output baseline (B0), a force-as-input baseline (B2), and an oracle
+              constant-stiffness baseline (B1)]
+            </span>. Because the extraction method consumes only signals every four-channel
+            bilateral rig already logs, it applies unchanged to any existing or future
+            bilateral-teleoperation dataset: every such dataset already contains an identifiable
+            compliance signal that this method can recover without new data collection.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Method</h2>
+        <div class="content has-text-justified">
+          <p>
+            A diagonal impedance law relates the contact wrench to a tracking error between a
+            commanded equilibrium pose and the measured follower pose. Given only the follower
+            pose and the measured wrench, this is unidentifiable: for any positive stiffness,
+            a compatible equilibrium exists that reproduces the observed force exactly. Four-channel
+            bilateral teleoperation breaks the ambiguity because the leader pose is itself an
+            independent, physically measured proxy for the operator's intended equilibrium.
+            Substituting it in makes the tracking error directly observed, and stiffness and
+            damping become identifiable by windowed regression, subject to an excitation and
+            noise-floor validity mask that excludes (rather than imputes) timesteps where the
+            regression is not well-conditioned.
+          </p>
+        </div>
+        <img src="./static/images/figures/fig2_pipeline.png"
+             alt="Pipeline: bilateral demonstration to masked compliance labels to policy training."
+             style="max-width: 100%; display: block; margin: 0 auto;">
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Results</h2>
+
+        <h3 class="title is-4">Dataset coverage and noise floor</h3>
+        <div class="content has-text-justified">
+          <p>
+            Applied to the full wiping-task dataset, the identifiability mask retains
+            64.2&ndash;95.0% of in-contact timesteps across all six wrench axes &mdash; every axis
+            clears a 25% floor by a wide margin. The measured per-axis noise floor is comfortably
+            below the labels' working range on every axis.
+          </p>
+        </div>
+        <img src="./static/images/figures/fig4_noise_floor.png"
+             alt="Per-axis sensorless wrench noise floor, measured from free-space residuals."
+             style="max-width: 100%; display: block; margin: 0 auto;">
+
+        <h3 class="title is-4" style="margin-top: 3rem;">Offline compliance-prediction benchmark</h3>
+        <div class="content has-text-justified">
+          <p>
+            A learned stiffness predictor improves on a constant-value baseline by
+            1.058&times; in aggregate RMSE on a held-out, cross-operator split (3 of 6 axes
+            individually beat the constant predictor), rejecting the null hypothesis that the
+            extracted labels are pure noise &mdash; the necessary precondition for training a
+            policy on them. Reported honestly per-axis rather than smoothed into a single number.
+          </p>
+        </div>
+        <img src="./static/images/figures/fig5_benchmark.png"
+             alt="Offline compliance-prediction benchmark, per-axis RMSE for constant, nearest-neighbour, and learned predictors."
+             style="max-width: 100%; display: block; margin: 0 auto;">
+
+        <h3 class="title is-4" style="margin-top: 3rem;">Cross-operator label validity</h3>
+        <div class="content has-text-justified">
+          <p>
+            As a secondary validity check (not a language-generalization claim), realized
+            contact-force magnitude separates cleanly by commanded manner ("normally" vs.
+            "firmly") within each operator, evidence that the extracted labels track an
+            independently verifiable human intent rather than noise.
+          </p>
+        </div>
+        <img src="./static/images/figures/fig6_cross_operator_adverbs.png"
+             alt="Cross-operator label validity: realized contact force by commanded manner, two operators."
+             style="max-width: 100%; display: block; margin: 0 auto;">
+
+        <h3 class="title is-4" style="margin-top: 3rem;">Real-robot policy evaluation</h3>
+        <div class="content has-text-justified">
+          <!--
+            POLICY RESULT PLACEHOLDER
+            Fill in the table below with the final numbers once available, then delete
+            this comment and the visible placeholder note under the table. Rows follow
+            the paper's baseline naming:
+              B0 - standard position-output VLA, fixed high stiffness
+              B1 - oracle constant-stiffness (per-axis best constant, not learned)
+              B2 - force-as-input VLA (force observed, not predicted)
+              B5 - our compliance-output policy
+          -->
+          <div class="notification is-warning is-light">
+            <strong>Placeholder.</strong> The table and rollout videos below are not final.
+            Replace the table values with the real-robot comparison once results are locked,
+            and add rollout clips to <code>./static/videos/</code> (e.g.
+            <code>rollout_b5.mp4</code>, <code>rollout_b0.mp4</code>), then swap them in for
+            the placeholder boxes underneath.
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+            <thead>
+              <tr>
+                <th>Policy</th>
+                <th>Description</th>
+                <th>Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>B0</td><td>Position-output VLA, fixed high stiffness</td><td>[ADD]</td></tr>
+              <tr><td>B1</td><td>Oracle constant-stiffness</td><td>[ADD]</td></tr>
+              <tr><td>B2</td><td>Force-as-input VLA</td><td>[ADD]</td></tr>
+              <tr><td>B5 (ours)</td><td>Compliance-output VLA</td><td>[ADD]</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="columns is-centered" style="margin-top: 1rem;">
+          <div class="column is-half has-text-centered">
+            <div class="video-placeholder">Rollout video placeholder<br>(B5, ours)</div>
+          </div>
+          <div class="column is-half has-text-centered">
+            <div class="video-placeholder">Rollout video placeholder<br>(B0, baseline)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Limitations</h2>
+        <div class="content has-text-justified">
+          <ul>
+            <li>All results are on a single task (whiteboard wiping); the identifiability argument
+              and extraction method are not claimed to be task-specific, but this has not been
+              verified on a second task.</li>
+            <li>The offline benchmark uses a small, session-level split; the aggregate improvement
+              margin is thin and should be re-verified as more sessions are collected.</li>
+            <li>The wrench noise floor is a free-space measurement, not an independently verified
+              calibration against a known applied force.</li>
+            <li>Cross-operator label agreement is imperfect, though within-operator separation
+              (which the validity finding rests on) is large and consistent.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <!-- Anonymized citation placeholder: fill in venue details post-review. -->
+    <pre><code>@inproceedings{anonymous2027compliance,
+  title     = {Compliance is an Action: Distilling Human Impedance from Bilateral
+               Demonstrations into Vision-Language-Action Policies},
+  author    = {Anonymous Author(s)},
+  booktitle = {Under review, IEEE International Conference on Robotics and
+               Automation (ICRA)},
+  year      = {2027},
+  note      = {Anonymized for double-blind review}
+}</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content has-text-centered">
+          <p>
+            This page is anonymized for double-blind review. It is built from the
+            <a href="https://nerfies.github.io">Nerfies project page template</a>, licensed under a
+            <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
