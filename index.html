@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="description"
-        content="Compliance is an Action: extracting real, identifiable compliance labels from bilateral teleoperation and distilling them into a vision-language-action policy for contact-rich manipulation.">
-  <meta name="keywords" content="VLA, vision-language-action, compliance, impedance control, bilateral teleoperation, manipulation, robot learning">
+        content="Compliance for Free: four-channel bilateral teleoperation already records the operator's intended equilibrium pose, which resolves the equilibrium/stiffness identifiability ambiguity and yields per-timestep, anisotropic compliance labels with zero dedicated force/torque hardware, at training or inference time.">
+  <meta name="keywords" content="VLA, vision-language-action, compliance, impedance control, bilateral teleoperation, manipulation, robot learning, ICRA 2027">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Compliance is an Action</title>
+  <title>Compliance for Free</title>
 
   <!--
     ANONYMITY NOTE (double-blind review):
@@ -14,9 +14,10 @@
       can link this page to an identified account/property). Do not add one back
       until after the review period.
     - No author names, affiliations, or personal links appear anywhere in this file.
-    - Before deploying, double-check image EXIF/metadata and PDF metadata (author,
-      producer, file path) for anything identifying, and check this repo's git
-      remote/commit author identity (see README.md in this repo for notes).
+    - The linked paper.pdf is compiled from ICRA27/main.tex with the LaTeX Author
+      field left empty; PDF metadata (Author/Title/Producer/Creator) has been
+      stripped/scrubbed. Before any further deployment, re-check image EXIF and
+      this repo's git remote/commit author identity (see README.md).
   -->
 
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
@@ -36,6 +37,11 @@
   <script src="./static/js/bulma-carousel.min.js"></script>
   <script src="./static/js/bulma-slider.min.js"></script>
   <script src="./static/js/index.js"></script>
+
+  <script>
+    MathJax = { tex: { inlineMath: [['$', '$']], displayMath: [['$$', '$$']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
 
@@ -44,8 +50,8 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">Compliance is an Action: Distilling Human
-            Impedance from Bilateral Demonstrations into Vision-Language-Action Policies</h1>
+          <h1 class="title is-1 publication-title">Compliance for Free: Learning Identifiable
+            Impedance via Bilateral Teleoperation</h1>
           <div class="is-size-5 publication-authors">
             <span class="author-block">Anonymous Author(s)</span>
           </div>
@@ -60,34 +66,22 @@
 
           <div class="column has-text-centered">
             <div class="publication-links">
-              <!--
-                PLACEHOLDER LINKS
-                Replace href="#" below once you have anonymized hosting for each:
-                  - Paper: an anonymous PDF link (e.g. an OpenReview submission link,
-                    or a PDF uploaded to this same repo under ./static/videos/paper.pdf
-                    with no identifying metadata).
-                  - Code:  an anonymized code host, e.g. https://anonymous.4open.science
-                  - Data:  same anonymization approach as Code, or a release note here
-                    pointing to an anonymized data host.
-                Until filled in, these buttons are left disabled (greyed out, not
-                clickable) so the page never ships a dead or accidentally-identifying link.
-              -->
               <span class="link-block">
-                <a href="#" class="external-link button is-normal is-rounded is-dark" disabled>
+                <a href="./static/videos/paper.pdf" class="external-link button is-normal is-rounded is-dark">
                   <span class="icon"><i class="fas fa-file-pdf"></i></span>
-                  <span>Paper (add anonymous link)</span>
+                  <span>Paper</span>
                 </a>
               </span>
               <span class="link-block">
                 <a href="#" class="external-link button is-normal is-rounded is-dark" disabled>
                   <span class="icon"><i class="fab fa-github"></i></span>
-                  <span>Code (add anonymous link)</span>
+                  <span>Code (coming soon)</span>
                 </a>
               </span>
               <span class="link-block">
                 <a href="#" class="external-link button is-normal is-rounded is-dark" disabled>
                   <span class="icon"><i class="far fa-images"></i></span>
-                  <span>Data (add anonymous link)</span>
+                  <span>Data (coming soon)</span>
                 </a>
               </span>
             </div>
@@ -101,28 +95,42 @@
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <!--
-        TEASER VIDEO PLACEHOLDER
-        Drop a short (~10-20s), silent/looping, non-identifying (no faces, no
-        lab signage, no audio with names) clip of the wiping-task rollout at:
-          ./static/videos/teaser.mp4
-        Then replace the <img> block below with:
-
-          <video id="teaser" autoplay muted loop playsinline height="100%">
-            <source src="./static/videos/teaser.mp4" type="video/mp4">
-          </video>
-
-        Until then this shows the method/pipeline figure as a stand-in.
-      -->
-      <img src="./static/images/figures/fig2_pipeline.png"
-           alt="Bilateral teleoperation to compliance-label extraction pipeline overview."
-           style="max-width: 100%;">
-      <h2 class="subtitle has-text-centered">
-        Four-channel bilateral teleoperation already records what pose-only interfaces cannot:
-        an independent measurement of the operator's commanded equilibrium &mdash; which is all
-        it takes to make per-timestep, anisotropic <span class="dnerf">compliance</span>
-        identifiable from real demonstrations.
+      <img src="./static/images/figures/hero_bilateral_rig.png"
+           alt="Four-channel bilateral teleoperation rig: a leader arm (right, operator-held) coupled to a follower arm (left) equipped with a wiping tool, no dedicated force/torque sensor on either arm."
+           style="max-width: 100%; border-radius: 10px;">
+      <h2 class="subtitle has-text-centered" style="margin-top: 1.5rem;">
+        A pose-only teleoperation interface &mdash; VR controller, SpaceMouse, UMI gripper &mdash;
+        records only where the operator moved the robot. Four-channel bilateral teleoperation
+        already records more: the leader arm's pose is an independent, physical measurement of the
+        operator's intended equilibrium, which is exactly the missing quantity that makes
+        per-timestep, anisotropic <span class="dnerf">compliance</span> identifiable from real
+        demonstrations &mdash; using only the manipulator's native joint-torque sensing, no
+        dedicated force/torque hardware, at training or inference time.
       </h2>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" style="padding-top: 0.5rem;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered is-multiline stat-strip">
+      <div class="column is-3 has-text-centered stat-card">
+        <p class="stat-number" style="color:#2A78D6;">0</p>
+        <p class="stat-label">Dedicated F/T or tactile sensors, training or inference</p>
+      </div>
+      <div class="column is-3 has-text-centered stat-card">
+        <p class="stat-number" style="color:#EB6834;">84.3&ndash;96.2%</p>
+        <p class="stat-label">In-contact timesteps retained by the identifiability mask (translational axes)</p>
+      </div>
+      <div class="column is-3 has-text-centered stat-card">
+        <p class="stat-number" style="color:#1BAF7A;">d = 0.89</p>
+        <p class="stat-label">Effect size of manner (&ldquo;firmly&rdquo; vs. &ldquo;normally&rdquo;) on our policy's realized contact force &mdash; the only one of five policies where it's significant</p>
+      </div>
+      <div class="column is-3 has-text-centered stat-card">
+        <p class="stat-number" style="color:#2A78D6;">50.0%</p>
+        <p class="stat-label">Real-robot task success, best of five policies (fixed-stiffness baseline: 33.3%)</p>
+      </div>
     </div>
   </div>
 </section>
@@ -136,46 +144,28 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            Contact-rich manipulation &mdash; wiping, insertion, assembly &mdash; requires a robot
-            to modulate <em>how hard</em> it pushes, not only <em>where</em> it goes: compliance is
-            as much an action as pose is. A growing wave of vision-language-action (VLA) policies
-            injects contact force as an <em>input</em> observation, but far fewer predict
-            compliance as an <em>output</em>, and the ones that do rely on privileged simulated
-            contact state or a hand-specified task structure. This is not an oversight; it is
-            forced by the interface. Every popular teleoperation channel for collecting VLA
-            demonstrations &mdash; VR controllers, a SpaceMouse, a handheld UMI gripper &mdash;
-            records only where the operator moved the robot, never what stiffness they intended it
-            to have.
+            Vision-language-action (VLA) policies typically output <em>positions</em>, but
+            contact-rich manipulation &mdash; wiping, insertion, assembly &mdash; requires
+            <em>impedance</em> too: how hard the robot pushes is as much an action as where it
+            goes. We extract compliance without any dedicated force/torque sensor, using only the
+            joint-torque sensing already present on the manipulator. Recent attempts to close this
+            gap treat force as an additional input observation; the handful that produce force
+            <em>outputs</em> must either assume a known task structure or infer compliance targets
+            from simulation with privileged contact state, because pose-only teleoperation (VR
+            controllers, SpaceMouse, UMI grippers) never measures what impedance the human was
+            regulating.
           </p>
           <p>
-            We show this is an identifiability problem, not a data-scale one. Given only the
-            measured follower pose and the measured contact wrench, a standard diagonal impedance
-            law has two unknowns per axis and one observed equation, at every timestep, for every
-            demonstration a pose-only interface has ever recorded. We resolve it with an interface
-            property, not a modeling trick: four-channel bilateral teleoperation already exchanges
-            position and force between a leader and a follower arm, and the leader pose is a
-            physical measurement of what the operator commanded as the equilibrium. Substituting
-            this for the unknown equilibrium collapses the ambiguity and makes per-timestep,
-            anisotropic stiffness identifiable by regression, using only the manipulator's own
-            joint-torque sensing &mdash; no dedicated force/torque or tactile sensor, at training
-            or inference time.
-          </p>
-          <p>
-            Applied to real bilateral wiping demonstrations, our identifiability mask retains
-            64.2&ndash;95.0% of in-contact timesteps across all six wrench axes, with measured
-            per-axis noise floors well below the labels' working range. A learned stiffness
-            predictor beats a constant-value baseline on a held-out, cross-operator split,
-            rejecting the null hypothesis that the extracted labels are noise. Trained on these
-            labels, a compliance-output VLA policy
-            <span class="placeholder-inline" title="Replace with the final head-to-head result">
-              [PLACEHOLDER &mdash; insert final real-robot policy result here: e.g. success rate
-              or task metric for the compliance-output policy (B5) vs. a fixed-stiffness
-              position-output baseline (B0), a force-as-input baseline (B2), and an oracle
-              constant-stiffness baseline (B1)]
-            </span>. Because the extraction method consumes only signals every four-channel
-            bilateral rig already logs, it applies unchanged to any existing or future
-            bilateral-teleoperation dataset: every such dataset already contains an identifiable
-            compliance signal that this method can recover without new data collection.
+            Four-channel bilateral control does. We show that the leader-arm trajectory is an
+            independent measurement of the operator's intended equilibrium pose, which uniquely
+            resolves the equilibrium/stiffness identifiability ambiguity that has forced prior
+            work into simulation. This yields per-timestep, anisotropic, real-world compliance
+            labels at zero additional annotation cost. We use these labels to supervise a
+            compliance head on a pretrained VLA, and show on real hardware that only the
+            resulting compliance-output policy &mdash; not a force-as-input baseline, not a
+            fixed-stiffness baseline, not a hybrid force/position baseline &mdash; changes what
+            the arm actually does when the instruction says &ldquo;firmly&rdquo; instead of
+            &ldquo;normally.&rdquo;
           </p>
         </div>
       </div>
@@ -185,28 +175,110 @@
 </section>
 
 
+<section class="section" style="padding-top: 0;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Contributions</h2>
+        <div class="content">
+          <ul>
+            <li>A sensorless extraction procedure that resolves the pose-only identifiability
+              ambiguity via bilateral teleoperation, yielding per-timestep compliance labels using
+              only native joint-torque sensors &mdash; applicable, unmodified, to any existing or
+              future bilateral-teleoperation dataset.</li>
+            <li>An offline benchmark showing the labels carry learnable signal: a trained predictor
+              beats a per-axis constant predictor on every translational axis, for a
+              <strong>1.25&times;</strong> aggregate improvement.</li>
+            <li>A compliance-output VLA policy trained on these labels that safely tracks chunked
+              impedance targets and is the <strong>only</strong> policy of five whose realized
+              contact force responds to the manner instruction.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 <section class="section">
   <div class="container is-max-desktop">
     <div class="columns is-centered">
       <div class="column is-full-width">
         <h2 class="title is-3">Method</h2>
+
+        <h3 class="title is-4">The identifiability problem</h3>
         <div class="content has-text-justified">
           <p>
-            A diagonal impedance law relates the contact wrench to a tracking error between a
-            commanded equilibrium pose and the measured follower pose. Given only the follower
-            pose and the measured wrench, this is unidentifiable: for any positive stiffness,
-            a compatible equilibrium exists that reproduces the observed force exactly. Four-channel
-            bilateral teleoperation breaks the ambiguity because the leader pose is itself an
-            independent, physically measured proxy for the operator's intended equilibrium.
-            Substituting it in makes the tracking error directly observed, and stiffness and
-            damping become identifiable by windowed regression, subject to an excitation and
-            noise-floor validity mask that excludes (rather than imputes) timesteps where the
-            regression is not well-conditioned.
+            We model contact at the end-effector with a diagonal, time-varying Cartesian
+            impedance law:
+          </p>
+          $$
+          \mathbf{f}(t) = \mathbf{K}(t) \odot \mathbf{e}(t) + \mathbf{D}(t) \odot \dot{\mathbf{e}}(t),
+          \qquad
+          \mathbf{e}(t) = \mathbf{x}_{\mathrm{eq}}(t) \ominus \mathbf{x}_f(t),
+          $$
+          <p>
+            where $\mathbf{x}_f(t)$ is the measured follower pose, $\mathbf{x}_{\mathrm{eq}}(t)$ is
+            the operator's <em>unobserved</em> commanded equilibrium, and $\mathbf{f}(t)$ is the
+            measured contact wrench. Given only the pair $(\mathbf{x}_f, \mathbf{f})$ &mdash; all a
+            pose-only interface ever records &mdash; this is <strong>unidentifiable</strong>: for
+            any axis and any positive stiffness, a compatible equilibrium exists that reproduces
+            the observed force exactly. Two unknowns, one equation, every timestep, no amount of
+            additional data collection fixes it.
+          </p>
+
+          <h3 class="title is-4" style="margin-top: 2rem;">Resolving it with an interface, not a model</h3>
+          <p>
+            Four-channel bilateral teleoperation actively couples a leader and a follower arm, so
+            the leader pose is itself an independent, physically measured proxy for the operator's
+            intended equilibrium:
+          </p>
+          $$
+          x_{\mathrm{eq}}(t) := x_l(t) \quad \text{(leader pose, independently measured)}.
+          $$
+          <p>
+            Substituting this collapses the ambiguity &mdash; $e(t) = x_l(t) \ominus x_f(t)$ is now
+            directly observed &mdash; and $(K(t), D(t))$ become identifiable by windowed regression
+            on $(e, \dot e, f)$, subject to an <strong>identifiability mask</strong> that
+            <em>excludes</em> (rather than imputes) timesteps with poor regression conditioning,
+            insufficient excitation, or force below the per-axis sensorless noise floor.
           </p>
         </div>
-        <img src="./static/images/figures/fig2_pipeline.png"
-             alt="Pipeline: bilateral demonstration to masked compliance labels to policy training."
-             style="max-width: 100%; display: block; margin: 0 auto;">
+
+        <figure style="margin-top: 1rem;">
+          <img src="./static/images/figures/fig2_pipeline.png"
+               alt="Pipeline: bilateral teleoperation rig produces leader/follower pose, joint position, velocity and measured torque, which feed sensorless wrench estimation (payload ID, re-zero, RFF-ridge bias model), then windowed regression and an identifiability mask, producing a labeled dataset K(t), D(t), m(t)."
+               style="max-width: 100%; display: block; margin: 0 auto;">
+          <figcaption class="figure-caption">From a bilateral rig to a labeled compliance dataset: sensorless wrench estimation, then windowed regression under an identifiability mask &mdash; no F/T sensor anywhere in the loop.</figcaption>
+        </figure>
+
+        <h3 class="title is-4" style="margin-top: 2.5rem;">Sensorless wrench estimation</h3>
+        <div class="content has-text-justified">
+          <p>
+            At static poses, the residual between measured joint torque and a zero-payload gravity
+            model is linear in the unknown tool's mass and mass-weighted center of mass, identified
+            by least squares over a handful of static poses. A per-axis residual bias model (a
+            random-Fourier-feature ridge regression over joint position and velocity) removes the
+            remaining configuration-dependent drift. The per-axis noise floor $\sigma_{f,i}$ used by
+            the identifiability mask is measured &mdash; not assumed &mdash; on held-out free-space
+            sweep sessions.
+          </p>
+        </div>
+
+        <h3 class="title is-4" style="margin-top: 2.5rem;">Compliance-output policy &amp; controller</h3>
+        <div class="content has-text-justified">
+          <p>
+            A SmolVLA backbone (vision-language model frozen, action expert fine-tuned) takes a
+            scene camera, a wrist camera, a language instruction (&ldquo;wipe the {left, right}
+            mark {normally, firmly}&rdquo;), and a force-history token (a trailing 500&thinsp;ms of
+            6-DoF wrench), and outputs an action chunk of absolute target pose <em>and</em> log
+            stiffness, $[x_{\mathrm{eq}}, \log K]$, trained with flow-matching on pose and a masked
+            Huber loss on $\log K$. A 1&thinsp;kHz Cartesian impedance controller tracks this
+            chunked output safely via temporal ensembling across overlapping chunks, log-space
+            stiffness rate-limiting, and a passivity-preserving energy tank that freezes stiffness
+            <em>increases</em> once depleted while always permitting decreases.
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -219,92 +291,230 @@
       <div class="column is-full-width">
         <h2 class="title is-3">Results</h2>
 
-        <h3 class="title is-4">Dataset coverage and noise floor</h3>
+        <h3 class="title is-4">Dataset validity: identifiable, retained, and above the noise floor</h3>
         <div class="content has-text-justified">
           <p>
-            Applied to the full wiping-task dataset, the identifiability mask retains
-            64.2&ndash;95.0% of in-contact timesteps across all six wrench axes &mdash; every axis
-            clears a 25% floor by a wide margin. The measured per-axis noise floor is comfortably
-            below the labels' working range on every axis.
+            Applied to real bilateral wiping demonstrations, the identifiability mask retains
+            <strong>84.3&ndash;96.2%</strong> of in-contact timesteps on the three translational
+            axes (Table&nbsp;1) &mdash; every axis clears a 25% validity floor by a wide margin.
+            The measured per-axis sensorless noise floor lies comfortably below the labels'
+            working range on every axis, and extracted stiffness traces show clean,
+            phase-separated dynamics through approach, contact, and retract.
           </p>
-        </div>
-        <img src="./static/images/figures/fig4_noise_floor.png"
-             alt="Per-axis sensorless wrench noise floor, measured from free-space residuals."
-             style="max-width: 100%; display: block; margin: 0 auto;">
-
-        <h3 class="title is-4" style="margin-top: 3rem;">Offline compliance-prediction benchmark</h3>
-        <div class="content has-text-justified">
-          <p>
-            A learned stiffness predictor improves on a constant-value baseline by
-            1.058&times; in aggregate RMSE on a held-out, cross-operator split (3 of 6 axes
-            individually beat the constant predictor), rejecting the null hypothesis that the
-            extracted labels are pure noise &mdash; the necessary precondition for training a
-            policy on them. Reported honestly per-axis rather than smoothed into a single number.
-          </p>
-        </div>
-        <img src="./static/images/figures/fig5_benchmark.png"
-             alt="Offline compliance-prediction benchmark, per-axis RMSE for constant, nearest-neighbour, and learned predictors."
-             style="max-width: 100%; display: block; margin: 0 auto;">
-
-        <h3 class="title is-4" style="margin-top: 3rem;">Cross-operator label validity</h3>
-        <div class="content has-text-justified">
-          <p>
-            As a secondary validity check (not a language-generalization claim), realized
-            contact-force magnitude separates cleanly by commanded manner ("normally" vs.
-            "firmly") within each operator, evidence that the extracted labels track an
-            independently verifiable human intent rather than noise.
-          </p>
-        </div>
-        <img src="./static/images/figures/fig6_cross_operator_adverbs.png"
-             alt="Cross-operator label validity: realized contact force by commanded manner, two operators."
-             style="max-width: 100%; display: block; margin: 0 auto;">
-
-        <h3 class="title is-4" style="margin-top: 3rem;">Real-robot policy evaluation</h3>
-        <div class="content has-text-justified">
-          <!--
-            POLICY RESULT PLACEHOLDER
-            Fill in the table below with the final numbers once available, then delete
-            this comment and the visible placeholder note under the table. Rows follow
-            the paper's baseline naming:
-              B0 - standard position-output VLA, fixed high stiffness
-              B1 - oracle constant-stiffness (per-axis best constant, not learned)
-              B2 - force-as-input VLA (force observed, not predicted)
-              B5 - our compliance-output policy
-          -->
-          <div class="notification is-warning is-light">
-            <strong>Placeholder.</strong> The table and rollout videos below are not final.
-            Replace the table values with the real-robot comparison once results are locked,
-            and add rollout clips to <code>./static/videos/</code> (e.g.
-            <code>rollout_b5.mp4</code>, <code>rollout_b0.mp4</code>), then swap them in for
-            the placeholder boxes underneath.
-          </div>
         </div>
 
         <div class="table-container">
           <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+            <caption>Table 1. Per-axis identifiability mask coverage, in-contact timesteps only.</caption>
             <thead>
-              <tr>
-                <th>Policy</th>
-                <th>Description</th>
-                <th>Result</th>
-              </tr>
+              <tr><th>Axis</th><th>$f_x$</th><th>$f_y$</th><th>$f_z$</th><th>$\tau_x$</th><th>$\tau_y$</th><th>$\tau_z$</th></tr>
             </thead>
             <tbody>
-              <tr><td>B0</td><td>Position-output VLA, fixed high stiffness</td><td>[ADD]</td></tr>
-              <tr><td>B1</td><td>Oracle constant-stiffness</td><td>[ADD]</td></tr>
-              <tr><td>B2</td><td>Force-as-input VLA</td><td>[ADD]</td></tr>
-              <tr><td>B5 (ours)</td><td>Compliance-output VLA</td><td>[ADD]</td></tr>
+              <tr><td>Coverage (%)</td><td>96.2</td><td>86.8</td><td>84.3</td><td>82.3</td><td>71.5</td><td>80.3</td></tr>
             </tbody>
           </table>
         </div>
 
-        <div class="columns is-centered" style="margin-top: 1rem;">
-          <div class="column is-half has-text-centered">
-            <div class="video-placeholder">Rollout video placeholder<br>(B5, ours)</div>
+        <div class="columns" style="margin-top: 1rem;">
+          <div class="column is-4">
+            <img src="./static/images/figures/fig3a_stiffness_trace.png"
+                 alt="Extracted stiffness trace K(t) with phase annotation for one firm-wiping demonstration." style="max-width:100%;">
+            <p class="figure-caption">Extracted stiffness $K(t)$, one demonstration.</p>
           </div>
-          <div class="column is-half has-text-centered">
-            <div class="video-placeholder">Rollout video placeholder<br>(B0, baseline)</div>
+          <div class="column is-4">
+            <img src="./static/images/figures/fig3_mask_coverage.png"
+                 alt="Identifiability mask coverage per axis, broken out by manner, across the full wiping dataset." style="max-width:100%;">
+            <p class="figure-caption">Mask coverage, per axis, by manner.</p>
           </div>
+          <div class="column is-4">
+            <img src="./static/images/figures/fig5_noise_floor.png"
+                 alt="Sensorless wrench noise floor per axis, measured from free-space residuals on held-out sweep sessions." style="max-width:100%;">
+            <p class="figure-caption">Measured sensorless noise floor $\sigma_{f,i}$.</p>
+          </div>
+        </div>
+
+        <h3 class="title is-4" style="margin-top: 3rem;">Offline compliance-prediction benchmark</h3>
+        <div class="content has-text-justified">
+          <p>
+            Before training a policy on the extracted labels, we check they carry any signal at
+            all: predicting $\log K_i(t)$ from a feature vector that deliberately excludes force. A
+            learned predictor (random-Fourier-feature ridge) beats a per-axis constant baseline on
+            every translational axis on a held-out, cross-session split &mdash; a
+            <strong>1.25&times;</strong> aggregate improvement in $\log K$ RMSE ($1.39\times$ on
+            $f_x$, $1.03\times$ on $f_y$, $1.41\times$ on $f_z$) &mdash; rejecting the null
+            hypothesis that the labels are pure noise, the necessary precondition for supervising a
+            policy with them.
+          </p>
+        </div>
+        <img src="./static/images/figures/fig5_benchmark.png"
+             alt="Offline compliance-prediction benchmark: per-axis RMSE on log K for constant, nearest-neighbour, and learned predictors, held-out test session."
+             style="max-width: 100%; display: block; margin: 0 auto;">
+        <p class="figure-caption has-text-centered">Rotational axes are shown for completeness; their targets are box-saturated so their RMSE is correspondingly small.</p>
+
+        <h3 class="title is-4" style="margin-top: 3rem;">The instruction survives, link by link</h3>
+        <div class="content has-text-justified">
+          <p>
+            The central claim is that compliance extracted from bilateral demonstrations is a
+            <em>learnable, instruction-conditioned action</em>. We test this as a three-link chain
+            on the manner contrast (&ldquo;firmly&rdquo; vs.\ &ldquo;normally&rdquo;) on the
+            in-plane axis $f_x$: does the adverb show up in the <em>extracted label</em>, then in
+            the <em>policy's own output</em>, then in the <em>arm's realized force</em>?
+          </p>
+        </div>
+        <div class="table-container">
+          <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+            <caption>Table 2. Instruction-conditioned compliance, measured end to end (Cohen's $d$, two-sided Mann&ndash;Whitney $p$).</caption>
+            <thead>
+              <tr><th>Link</th><th>Quantity</th><th>firmly</th><th>normally</th><th>$d$</th><th>$p$</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>L1</td><td>Extracted label $K_x$</td><td>146.2</td><td>127.2</td><td>0.76</td><td>0.002</td></tr>
+              <tr><td>L2</td><td>Policy's commanded $K_x$</td><td>141.2</td><td>116.4</td><td>0.98</td><td>0.019</td></tr>
+              <tr><td>L3</td><td>Realized RMS contact force</td><td>9.12</td><td>6.40</td><td>0.89</td><td>0.023</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="content has-text-justified">
+          <p>
+            All three links carry the instruction: the demonstrations encode the adverb in
+            stiffness ($d=0.76$), the policy reproduces that dependence in its own output
+            ($d=0.98$), and it survives all the way to realized contact force ($d=0.89$). The
+            policy also commits to genuine anisotropy &mdash; a median in-plane/normal stiffness
+            ratio of $2.50\times$ in the contact frame, far beyond the ${\approx}1.2\times$ in the
+            pooled label distribution &mdash; so this is not regression to the label mean.
+          </p>
+          <p>
+            But predicting compliance is not by itself sufficient: of five policies, only ours
+            modulates realized force with the instruction (Fig. below). B3 moves its
+            <em>commanded</em> stiffness with manner ($d=2.26$ on $f_y$) but its realized force does
+            not follow ($d=0.17$) &mdash; the rest of the policy still has to track what it predicts.
+          </p>
+        </div>
+        <img src="./static/images/figures/fig6_manner_force.png"
+             alt="Left: RMS contact force per rollout by manner for all five policies, only the compliance-output policy (B4, ours) shows a significant separation, d=0.89, p=0.023. Right: median contact force over time in rollout for our policy, normally vs firmly, showing sustained separation through the wiping phase."
+             style="max-width: 100%; display: block; margin: 0 auto;">
+        <p class="figure-caption has-text-centered">The manner word changes what the arm does &mdash; and only for the compliance-output policy. The separation is sustained through the wiping phase, not driven by isolated peaks, and both manners converge on approach/retract where the instruction shouldn't matter.</p>
+
+        <h3 class="title is-4" style="margin-top: 3rem;">Real-robot task performance</h3>
+        <div class="content has-text-justified">
+          <p>
+            All policies are evaluated on a whiteboard-wiping task, $n=24$ rollouts per policy (3
+            seeds, a $2\times2$ referent$\times$manner instruction grid). <strong>B0</strong>:
+            position output, fixed stiffness. <strong>B1</strong>: position output, oracle
+            per-axis constant stiffness fit to our label distribution. <strong>B2</strong>:
+            ForceVLA-style force-as-input, position output. <strong>B3</strong>:
+            ForceVLA2/Force-Policy-style hybrid force+position output. <strong>B4 (ours)</strong>:
+            compliance output, force input.
+          </p>
+        </div>
+        <div class="table-container">
+          <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+            <caption>Table 3. In-distribution task performance, five policies ($n=24$/policy, 3 seeds).</caption>
+            <thead>
+              <tr><th>Policy</th><th>Success (M1)</th><th>Ink removal % (M2)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>B0 &mdash; pos., fixed $K$</td><td>33.3%</td><td>32.6 &plusmn; 34.9</td></tr>
+              <tr><td>B1 &mdash; pos., oracle const. $K$</td><td>0.0%</td><td>1.3 &plusmn; 3.0</td></tr>
+              <tr><td>B2 &mdash; force-input, pos. out</td><td>41.7%</td><td>37.3 &plusmn; 31.5</td></tr>
+              <tr><td>B3 &mdash; force-input, hybrid out</td><td>20.8%</td><td>18.4 &plusmn; 28.8</td></tr>
+              <tr><td><strong>B4 (ours) &mdash; compliance out</strong></td><td><strong>50.0%</strong></td><td><strong>40.8 &plusmn; 35.3</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="content has-text-justified">
+          <p>
+            Contact-force behavior is more informative than success alone: our policy attains the
+            highest ink removal at a peak force <strong>8.6&thinsp;N lower</strong> and an RMS
+            force <strong>3.1&thinsp;N lower</strong> than B0, tripping one protective stop in 24
+            rollouts against B0's six.
+          </p>
+        </div>
+        <div class="table-container">
+          <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+            <caption>Table 4. Contact-force behavior, same rollouts as Table 3.</caption>
+            <thead>
+              <tr><th>Policy</th><th>Peak force (N)</th><th>RMS force (N)</th><th>Protective stops</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>B0</td><td>34.9 &plusmn; 14.0</td><td>10.9 &plusmn; 2.2</td><td>6/24</td></tr>
+              <tr><td>B1</td><td>21.4 &plusmn; 7.2</td><td>6.5 &plusmn; 2.3</td><td>0/24</td></tr>
+              <tr><td>B2</td><td>32.3 &plusmn; 9.0</td><td>12.9 &plusmn; 6.5</td><td>2/24</td></tr>
+              <tr><td>B3</td><td>19.6 &plusmn; 8.2</td><td>7.1 &plusmn; 3.1</td><td>0/24</td></tr>
+              <tr><td><strong>B4 (ours)</strong></td><td>26.3 &plusmn; 9.1</td><td>7.8 &plusmn; 3.3</td><td>1/24</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <img src="./static/images/figures/fig7_qualitative_rollouts.png"
+             alt="Qualitative rollouts of the compliance-output policy, scene and wrist camera, across the 2x2 referent by manner instruction grid, five phases per rollout: approach, pre-contact, contact, wiping, retract."
+             style="max-width: 100%; display: block; margin: 0 auto; margin-top: 1.5rem;">
+        <p class="figure-caption has-text-centered">Qualitative rollouts of the compliance-output policy across the referent&times;manner instruction grid &mdash; scene camera (top) and wrist camera (bottom), five phases per rollout.</p>
+
+        <h3 class="title is-4" style="margin-top: 3rem;">Controller validation</h3>
+        <div class="content has-text-justified">
+          <p>
+            Before trusting any of the above, we verify the low-level controller actually responds
+            to a commanded stiffness: a 20&thinsp;s sinusoidal probe on all six axes shows realized
+            stiffness tightly tracking the commanded signal, with the energy-tank trace confirming
+            the passivity budget behaves as designed.
+          </p>
+        </div>
+        <img src="./static/images/figures/fig4_controller_validation.png"
+             alt="Controller validation on real hardware: commanded vs. realized stiffness under a 20 second sinusoidal probe on all six axes, with the accompanying energy tank trace."
+             style="max-width: 100%; display: block; margin: 0 auto;">
+
+        <h3 class="title is-4" style="margin-top: 3rem;">Is the force channel actually used?</h3>
+        <div class="content has-text-justified">
+          <p>
+            We freeze the force-history token at its first observed value for the remainder of the
+            episode and re-run. All three force-consuming policies degrade when force is frozen
+            (B4 by $-8.3$ points), consistent with the live force signal being causally used rather
+            than ignored &mdash; though with $n=24$ per policy none of these drops individually
+            reaches significance ($p \geq 0.73$).
+          </p>
+        </div>
+        <div class="table-container">
+          <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+            <caption>Table 5. Causal force ablation: force history frozen at its first-observed value vs. the live condition.</caption>
+            <thead>
+              <tr><th>Policy</th><th>Live (M1)</th><th>Frozen</th><th>&Delta;</th><th>$p$</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>B2</td><td>41.7% (10/24)</td><td>35.7% (5/14)</td><td>&minus;6.0 pts</td><td>1.00</td></tr>
+              <tr><td>B3</td><td>20.8% (5/24)</td><td>16.7% (2/12)</td><td>&minus;4.2 pts</td><td>1.00</td></tr>
+              <tr><td><strong>B4</strong></td><td>50.0% (12/24)</td><td>41.7% (5/12)</td><td>&minus;8.3 pts</td><td>0.73</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="title is-4" style="margin-top: 3rem;">Why B1's oracle stiffness fails</h3>
+        <div class="content has-text-justified">
+          <p>
+            Grid-searching, per axis, the single constant stiffness that best fits our label
+            distribution gives unremarkable translational constants (141&ndash;158&thinsp;N/m,
+            well inside the controller's realizable range) but rotational constants that land on
+            the extraction's lower bound &mdash; the rotational impedance in these demonstrations is
+            softer than the controller's minimum commandable rotational stiffness. Deployed, B1
+            cannot hold orientation against the board, which is why it scores 0% and not evidence
+            against constant impedance as such: the honest constant-impedance control in this study
+            is B0 (hand-set, well-posed, 33.3%). The claim is narrower and, we think, sharper &mdash;
+            a well-tuned constant impedance still cannot modulate force on instruction (Table 2).
+          </p>
+        </div>
+        <div class="table-container">
+          <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+            <caption>Table 6. Constant-stiffness fit (B1), per-axis best constant (contact frame, grid-searched on validation split).</caption>
+            <thead>
+              <tr><th>Axis</th><th>Best constant $K_i$</th><th>Realizable range</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>$f_x$</td><td>141.1 N/m</td><td>[50, 1500] N/m</td></tr>
+              <tr><td>$f_y$</td><td>149.5 N/m</td><td>[50, 1500] N/m</td></tr>
+              <tr><td>$f_z$</td><td>158.4 N/m</td><td>[50, 1500] N/m</td></tr>
+              <tr><td>$\tau_x, \tau_y, \tau_z$</td><td colspan="2">all at the 5 N&middot;m/rad lower bound</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -315,20 +525,66 @@
 <section class="section">
   <div class="container is-max-desktop">
     <div class="columns is-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-3">Limitations</h2>
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Discussion &amp; Limitations</h2>
         <div class="content has-text-justified">
+          <p>
+            The comparison against B2 (ForceVLA-style: force as input, position as output)
+            isolates the distinction this paper cares about: observing force is not the same as
+            acting compliantly. Facing the wiping task's rigid physical constraints, position-only
+            policies either under-press (poor ink removal) or inject excessive energy at chunk
+            boundaries (protective stops). Actively modulating the impedance target $K$ lets our
+            policy absorb these geometric mismatches natively rather than fighting them.
+          </p>
           <ul>
             <li>All results are on a single task (whiteboard wiping); the identifiability argument
               and extraction method are not claimed to be task-specific, but this has not been
               verified on a second task.</li>
-            <li>The offline benchmark uses a small, session-level split; the aggregate improvement
-              margin is thin and should be re-verified as more sessions are collected.</li>
+            <li>Sensorless wrench estimation is configuration-dependent, so both calibration and
+              teleoperation were constrained to a fixed nullspace posture and working volume &mdash;
+              a real kinematic trade-off against dedicated F/T hardware, traded here for zero
+              end-effector bulk, wiring, or cost.</li>
+            <li>The offline benchmark uses a small, session-level, cross-operator split; the
+              per-axis improvement margin is thin on some axes and should be re-verified as more
+              sessions are collected.</li>
+            <li>The M7 causal force ablation shows the expected direction of degradation on every
+              force-consuming policy, but at $n=24$ per policy none of the individual drops reaches
+              significance.</li>
             <li>The wrench noise floor is a free-space measurement, not an independently verified
               calibration against a known applied force.</li>
-            <li>Cross-operator label agreement is imperfect, though within-operator separation
-              (which the validity finding rests on) is large and consistent.</li>
           </ul>
+          <p>
+            Pose-only interfaces remain the most accessible way to collect kinematic demonstration
+            data, but they are mathematically insufficient for impedance learning &mdash; no amount
+            of scale fixes an identifiability problem. Because the extraction procedure consumes
+            only signals every four-channel bilateral rig already logs, it applies unchanged to any
+            existing or future bilateral-teleoperation dataset: an identifiable compliance signal
+            that can be recovered without new data collection.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" style="padding-top: 0;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Conclusion</h2>
+        <div class="content has-text-justified">
+          <p>
+            Standard pose-only teleoperation interfaces record only realized poses, which leaves the
+            operator's intended equilibrium and stiffness confounded &mdash; a mathematical
+            bottleneck, not a data-scale one. Four-channel bilateral teleoperation collapses this
+            ambiguity for free: the leader arm already measures what the operator intended.
+            Supervising a compliance head on these extracted labels lets a VLA policy dynamically
+            regulate contact impedance and outperform rigid, force-input baselines on real hardware.
+            Future work: extending this pipeline to more dynamic, impulsive contact tasks, and
+            cross-embodiment distillation of bilateral-derived compliance priors onto lower-cost
+            hardware.
+          </p>
         </div>
       </div>
     </div>
@@ -340,9 +596,9 @@
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
     <!-- Anonymized citation placeholder: fill in venue details post-review. -->
-    <pre><code>@inproceedings{anonymous2027compliance,
-  title     = {Compliance is an Action: Distilling Human Impedance from Bilateral
-               Demonstrations into Vision-Language-Action Policies},
+    <pre><code>@inproceedings{anonymous2027complianceforfree,
+  title     = {Compliance for Free: Learning Identifiable Impedance via
+               Bilateral Teleoperation},
   author    = {Anonymous Author(s)},
   booktitle = {Under review, IEEE International Conference on Robotics and
                Automation (ICRA)},
