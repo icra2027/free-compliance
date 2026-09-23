@@ -95,9 +95,12 @@
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <img src="./static/images/figures/hero_bilateral_rig.png"
-           alt="Four-channel bilateral teleoperation rig: a leader arm (right, operator-held) coupled to a follower arm (left) equipped with a wiping tool, no dedicated force/torque sensor on either arm."
-           style="max-width: 100%; border-radius: 10px;">
+      <video id="teaser-video" controls playsinline preload="metadata"
+             poster="./static/images/figures/hero_bilateral_rig.png"
+             style="width: 100%; border-radius: 10px;"
+             aria-label="Paper video. Poster: four-channel bilateral teleoperation rig, a leader arm (right, operator-held) coupled to a follower arm (left) equipped with a wiping tool, no dedicated force/torque sensor on either arm.">
+        <source src="./static/videos/ICRA27_3544_VI_i.mp4" type="video/mp4">
+      </video>
       <h2 class="subtitle has-text-centered" style="margin-top: 1.5rem;">
         A pose-only teleoperation interface &mdash; VR controller, SpaceMouse, UMI gripper &mdash;
         records only where the operator moved the robot. Four-channel bilateral teleoperation
